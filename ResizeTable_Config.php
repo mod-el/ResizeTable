@@ -20,7 +20,7 @@ class ResizeTable_Config extends Module_Config{
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
