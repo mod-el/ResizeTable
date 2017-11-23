@@ -1,7 +1,8 @@
-<?php
-namespace Model;
+<?php namespace Model\ResizeTable;
 
-class ResizeTable extends Module{
+use Model\Core\Module;
+
+class ResizeTable extends Module {
 	/** @var array */
 	public $options = [];
 	/** @var array */
