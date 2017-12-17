@@ -31,6 +31,6 @@ class Config extends Module_Config {
 	 * @return string
 	 */
 	public function getTemplate(array $request){
-		return INCLUDE_PATH.'model'.DIRECTORY_SEPARATOR.'ResizeTable'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'install';
+		return 'install';
 	}
 }
