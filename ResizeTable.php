@@ -13,7 +13,7 @@ class ResizeTable extends Module {
 	/**
 	 * @param array $options
 	 */
-	public function init($options){
+	public function init(array $options){
 		$this->options = array_merge(array(
 			'table' => 'admin_users',
 			'page' => false,

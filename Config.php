@@ -3,7 +3,8 @@
 use Model\Core\Module_Config;
 
 class Config extends Module_Config {
-	public function install(array $data = []){
+	public function install(array $data = []): bool
+	{
 		if(isset($data['install'])){
 			if(isset($data['crea-tabella'])){
 				return $this->model->_Db->query('CREATE TABLE `zk_dimensioni_colonne` (
