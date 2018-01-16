@@ -21,7 +21,7 @@
 <h2>Table resize module - Installation</h2>
 
 <form action="" method="post">
-	<?php csrfInput(); ?>
+	<?php $this->model->_CSRF->csrfInput(); ?>
     <hr />
     <input type="hidden" name="install" value="1" />
     <input type="checkbox" name="crea-tabella" id="tabella" checked /> <label for="tabella">Create table</label><br />
