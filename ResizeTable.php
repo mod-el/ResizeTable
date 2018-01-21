@@ -2,7 +2,8 @@
 
 use Model\Core\Module;
 
-class ResizeTable extends Module {
+class ResizeTable extends Module
+{
 	/** @var array */
 	public $options = [];
 	/** @var array */
@@ -13,7 +14,8 @@ class ResizeTable extends Module {
 	/**
 	 * @param array $options
 	 */
-	public function init(array $options){
+	public function init(array $options)
+	{
 		$this->options = array_merge(array(
 			'table' => 'admin_users',
 			'page' => false,
@@ -26,16 +28,17 @@ class ResizeTable extends Module {
 	/**
 	 * @return array|bool
 	 */
-	public function load(){
-		if(!$this->options['page'] or !$this->options['user'])
+	public function load()
+	{
+		if (!$this->options['page'] or !$this->options['user'])
 			return false;
 
 		$tableModel = $this->model->_Db->loadTable($this->table);
 		$widths = array();
 
-		try{
+		try {
 			$options = array();
-			if($tableModel and isset($tableModel->columns['ord'])){
+			if ($tableModel and isset($tableModel->columns['ord'])) {
 				$options['order_by'] = 'ord';
 			}
 			$dimensioniQ = $this->model->_Db->select_all($this->table, [
@@ -43,16 +46,16 @@ class ResizeTable extends Module {
 				'utente' => $this->options['user'],
 				'tabella' => $this->options['page'],
 			], $options);
-			foreach($dimensioniQ as $d)
+			foreach ($dimensioniQ as $d)
 				$widths[$d['colonna']] = $d['width'];
-		}catch(\Exception $e){
+		} catch (\Exception $e) {
 			echo getErr($e);
-			foreach($this->options['columns'] as $k)
+			foreach ($this->options['columns'] as $k)
 				$widths[$k] = $this->options['default'];
 		}
 
-		foreach($this->options['columns'] as $k){
-			if(!isset($widths[$k])){
+		foreach ($this->options['columns'] as $k) {
+			if (!isset($widths[$k])) {
 				$insert = [
 					'table' => $this->options['table'],
 					'utente' => $this->options['user'],
@@ -60,7 +63,7 @@ class ResizeTable extends Module {
 					'colonna' => $k,
 					'width' => $this->options['default'],
 				];
-				if($tableModel and isset($tableModel->columns['ord'])){
+				if ($tableModel and isset($tableModel->columns['ord'])) {
 					$insert['ord'] = $this->model->_Db->select($this->table, [
 						'table' => $this->options['table'],
 						'utente' => $this->options['user'],
@@ -72,28 +75,28 @@ class ResizeTable extends Module {
 			}
 		}
 
-		if($this->options['columns']){
-			foreach($widths as $k => $w){
-				if(!in_array($k, $this->options['columns'])){
+		if ($this->options['columns']) {
+			foreach ($widths as $k => $w) {
+				if (!in_array($k, $this->options['columns'])) {
 					$check = $this->model->_Db->select($this->table, [
 						'table' => $this->options['table'],
 						'utente' => $this->options['user'],
 						'tabella' => $this->options['page'],
-						'colonna' => $k
+						'colonna' => $k,
 					]);
-					if($check){
+					if ($check) {
 						$this->model->_Db->delete($this->table, [
 							'table' => $this->options['table'],
 							'utente' => $this->options['user'],
 							'tabella' => $this->options['page'],
-							'colonna' => $k
+							'colonna' => $k,
 						]);
-						if(isset($check['ord'])){
-							$this->model->_Db->query('UPDATE `'.$this->table.'` SET `ord`=`ord`-1 WHERE '.$this->model->_Db->makeSqlString($this->table, [
+						if (isset($check['ord'])) {
+							$this->model->_Db->query('UPDATE `' . $this->table . '` SET `ord`=`ord`-1 WHERE ' . $this->model->_Db->makeSqlString($this->table, [
 									'table' => $this->options['table'],
 									'utente' => $this->options['user'],
 									'tabella' => $this->options['page'],
-								], 'AND').' AND `ord`>'.$check['ord']);
+								], 'AND') . ' AND `ord`>' . $check['ord']);
 						}
 					}
 				}
@@ -110,18 +113,19 @@ class ResizeTable extends Module {
 	 * @param int $w
 	 * @return bool
 	 */
-	public function set($c, $w){
-		if($this->widths===null)
+	public function set(string $c, int $w): bool
+	{
+		if ($this->widths === null)
 			$this->load();
 
-		if($this->widths and array_key_exists($c, $this->widths))
+		if ($this->widths and array_key_exists($c, $this->widths))
 			$this->widths[$c] = $w;
 
 		return $this->model->_Db->update($this->table, [
 			'table' => $this->options['table'],
 			'utente' => $this->options['user'],
 			'tabella' => $this->options['page'],
-			'colonna' => $c
+			'colonna' => $c,
 		], [
 			'width' => $w,
 		]);
@@ -131,12 +135,13 @@ class ResizeTable extends Module {
 	 * @param string $c
 	 * @return bool|int
 	 */
-	public function get($c){
-		if($this->widths===null)
+	public function get(string $c)
+	{
+		if ($this->widths === null)
 			$this->load();
-		if(array_key_exists($c, $this->widths)){
+		if (array_key_exists($c, $this->widths)) {
 			return $this->widths[$c];
-		}else{
+		} else {
 			return false;
 		}
 	}
