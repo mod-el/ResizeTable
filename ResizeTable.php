@@ -33,7 +33,7 @@ class ResizeTable extends Module
 		if (!$this->options['page'] or !$this->options['user'])
 			return false;
 
-		$tableModel = $this->model->_Db->loadTable($this->table);
+		$tableModel = $this->model->_Db->getTable($this->table);
 		$widths = array();
 
 		try {
