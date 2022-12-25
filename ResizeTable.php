@@ -92,11 +92,11 @@ class ResizeTable extends Module
 							'colonna' => $k,
 						]);
 						if (isset($check['ord'])) {
-							$this->model->_Db->query('UPDATE `' . $this->table . '` SET `ord`=`ord`-1 WHERE ' . $this->model->_Db->makeSqlString($this->table, [
+							$this->model->_Db->query('UPDATE `' . $this->table . '` SET `ord`=`ord`-1 WHERE ' . \Model\Db\Db::getConnection()->getBuilder()->buildQueryString([
 									'table' => $this->options['table'],
 									'utente' => $this->options['user'],
 									'tabella' => $this->options['page'],
-								], 'AND') . ' AND `ord`>' . $check['ord']);
+								], ['operator' => 'AND']) . ' AND `ord`>' . $check['ord']);
 						}
 					}
 				}
